@@ -11,7 +11,6 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DB";
-    public static final String TABLE_NAMES_NAME = "names";
     public static final String TABLE_DATA_NAME = "data";
 
 
@@ -23,18 +22,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(TAG, "Creating DB...");
 
-        db.execSQL("CREATE TABLE " + TABLE_NAMES_NAME + "(" +
-                        "id_action INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "desc TEXT" + ");"
-        );
-
         db.execSQL("CREATE TABLE " + TABLE_DATA_NAME + "(" +
                         "id_data INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "id_action INTEGER NOT NULL, " +
-                        "data1 REAL NOT NULL, " +
-                        "data2 REAL NOT NULL, " +
-                        "data3 REAL NOT NULL, " +
-                        "FOREIGN KEY (id_action) REFERENCES " + TABLE_NAMES_NAME + "(id_action);"
+                        "record_id INTEGER NOT NULL, " +
+                        "rot1 REAL NOT NULL, " +
+                        "rot2 REAL NOT NULL, " +
+                        "rot3 REAL NOT NULL, " +
+                        "acc1 REAL NOT NULL, " +
+                        "acc2 REAL NOT NULL, " +
+                        "acc3 REAL NOT NULL " +
+                        ");"
         );
 
         Log.i(TAG, "DB created!");
@@ -43,9 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i2) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAMES_NAME);
 
-        Log.i(TAG, "Tables are dropped");
+        Log.i(TAG, "Table was dropped");
 
         onCreate(db);
     }

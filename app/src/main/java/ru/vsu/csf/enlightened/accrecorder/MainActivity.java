@@ -62,25 +62,34 @@ public class MainActivity extends ActionBarActivity {
     }
     //endregion
 
+
     //region Buttons
     public void startRecording(View view) {
         textStatus.setText("Recording...");
 
         String actionName = editActionName.getText().toString().toLowerCase();
 
-        Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
+        /*Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
         intent.putExtra("action", actionName);
         MainActivity.this.startService(intent);
-        Log.i(TAG, "Service started!");
+        Log.i(TAG, "Service started!");*/
+
+        Intent intent = new Intent(this, AccelerometerService.class);
+        intent.putExtra("action", actionName);
+        startService(intent);
     }
 
     public void stopRecording(View view) {
-        Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
-        MainActivity.this.stopService(intent);
+        /*Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
+        MainActivity.this.stopService(intent);*/
+
+        stopService(new Intent(this, AccelerometerService.class));
     }
 
     public void clearDB(View view) {
-        //TODO: clear DB
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + DBHelper.TABLE_DATA_NAME + " ;");
     }
     //endregion
 
