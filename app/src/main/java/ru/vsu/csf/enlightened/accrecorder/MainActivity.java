@@ -69,20 +69,12 @@ public class MainActivity extends ActionBarActivity {
 
         String actionName = editActionName.getText().toString().toLowerCase();
 
-        /*Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
-        intent.putExtra("action", actionName);
-        MainActivity.this.startService(intent);
-        Log.i(TAG, "Service started!");*/
-
         Intent intent = new Intent(this, AccelerometerService.class);
         intent.putExtra("action", actionName);
         startService(intent);
     }
 
     public void stopRecording(View view) {
-        /*Intent intent = new Intent(MainActivity.this, AccelerometerService.class);
-        MainActivity.this.stopService(intent);*/
-
         stopService(new Intent(this, AccelerometerService.class));
     }
 
@@ -90,6 +82,10 @@ public class MainActivity extends ActionBarActivity {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + DBHelper.TABLE_DATA_NAME + " ;");
+
+        Log.d(TAG, "Table dropped from btn");
+
+        db.close();
     }
     //endregion
 

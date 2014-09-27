@@ -20,9 +20,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i(TAG, "Creating DB...");
+        Log.i(TAG, "onCreate");
 
-        db.execSQL("CREATE TABLE " + TABLE_DATA_NAME + "(" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_DATA_NAME + "(" +
                         "id_data INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "record_id INTEGER NOT NULL, " +
                         "rot1 REAL NOT NULL, " +
@@ -33,8 +33,6 @@ public class DBHelper extends SQLiteOpenHelper {
                         "acc3 REAL NOT NULL " +
                         ");"
         );
-
-        Log.i(TAG, "DB created!");
     }
 
     @Override

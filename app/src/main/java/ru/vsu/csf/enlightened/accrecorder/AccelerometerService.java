@@ -39,6 +39,9 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     private DBHelper dbHelper;
 
+    SQLiteDatabase db;
+
+
     public AccelerometerService() {
     }
 
@@ -57,6 +60,9 @@ public class AccelerometerService extends Service implements SensorEventListener
         orientationData = new float[3];
 
         dbHelper = new DBHelper(AccelerometerService.this);
+        db  = dbHelper.getWritableDatabase();
+        dbHelper.onCreate(db);
+
 
         taskThread = new Thread(new Runnable() {
             @Override
@@ -76,8 +82,9 @@ public class AccelerometerService extends Service implements SensorEventListener
 
                         Log.d(TAG, "writing!");
 
-                        SQLiteDatabase db = dbHelper.getWritableDatabase();
                         ContentValues cv = new ContentValues();
+
+                        db = dbHelper.getWritableDatabase();
 
                         for (int i = 0; i < accelHistory.size(); i++) {
                             cv.put("record_id", recordId);
@@ -93,12 +100,11 @@ public class AccelerometerService extends Service implements SensorEventListener
                             db.insert(DBHelper.TABLE_DATA_NAME, null, cv);
                         }
 
-                        recordId++;
-
                         Log.d(TAG, recordId+"");
 
                         accelHistory.clear();
                         rotHistory.clear();
+                        dbHelper.close();
                     }
 
                     try {
@@ -115,7 +121,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
-        record(intent);
+        record();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -127,8 +133,9 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
 
-    void record(Intent intent) {
+    void record() {
         taskThread.start();
+        recordId++;
     }
 
 
